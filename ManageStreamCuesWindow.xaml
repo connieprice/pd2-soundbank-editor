@@ -1,0 +1,43 @@
+﻿<Window x:Class="PD2SoundBankEditor.ManageStreamCuesWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PD2SoundBankEditor"
+        mc:Ignorable="d"
+        Title="ManageStreamCuesWindow" Height="450" Width="600">
+	<Window.Style>
+		<Style TargetType="Window" BasedOn="{StaticResource {x:Type Window}}"/>
+	</Window.Style>
+	<Grid Name="mainGrid" Margin="8,8,8,8">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="3*"/>
+			<ColumnDefinition Width="1*"/>
+		</Grid.ColumnDefinitions>
+
+		<DataGrid Name="dataGrid" AutoGenerateColumns="False" Grid.Column="0" SelectionChanged="OnDataGridSelectionChanged" HorizontalScrollBarVisibility="Disabled">
+			<DataGrid.Columns>
+				<DataGridTextColumn Width="*" Header="Time" Binding="{Binding Time, StringFormat=N}" IsReadOnly="False"/>
+				<DataGridTextColumn Width="*" Header="Label" Binding="{Binding Label}" IsReadOnly="False"/>
+			</DataGrid.Columns>
+		</DataGrid>
+
+		<Grid Grid.Column="1" Grid.Row="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="8,0,0,0">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="*"/>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition Height="Auto"/>
+			</Grid.RowDefinitions>
+
+			<Button Grid.Row="0" Name="addRowButton" Content="Add Row..." Click="OnAddRowButtonClick" IsEnabled="True" Height="24"/>
+			<Button Grid.Row="3" Name="deleteSelectedButton" Content="Delete Selected..." Click="OnDeleteSelectedClick" IsEnabled="False" Height="24" Margin="0,8,0,0"/>
+
+			<Button Grid.Row="5" Name="closeButton" Content="Cancel" Click="OnCloseClick" IsEnabled="True" Height="24"/>
+			<Button Grid.Row="6" Name="saveButton" Content="Save" Click="OnSaveClick" IsEnabled="True" Height="24"/>
+		</Grid>
+	</Grid>
+</Window>

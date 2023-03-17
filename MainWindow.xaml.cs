@@ -20,6 +20,8 @@ using MessageBoxButton = AdonisUI.Controls.MessageBoxButton;
 using MessageBoxImage = AdonisUI.Controls.MessageBoxImage;
 using MessageBoxResult = AdonisUI.Controls.MessageBoxResult;
 
+using PD2SoundBankEditor.Misc;
+
 namespace PD2SoundBankEditor {
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
@@ -34,6 +36,7 @@ namespace PD2SoundBankEditor {
 		private ApplicationSettings appSettings = new ApplicationSettings();
 		private MediaPlayer mediaPlayer = new MediaPlayer();
 		private SoundBank soundBank;
+		private AudioStream audioStream;
 		private Button playingButton;
 		private bool converterAvailable;
 		private CollectionViewSource soundBankViewSource = new CollectionViewSource();
@@ -322,6 +325,21 @@ namespace PD2SoundBankEditor {
 			}
 
 			DoGenericProcessing(true, ConvertLooseFiles, OnConvertLooseFilesFinished, diag.FileNames);
+		}
+
+		private void OnManageStreamCuesClick(object sender, RoutedEventArgs e) {
+			var diag = new OpenFileDialog {
+				Filter = "Stream audio files (*.stream)|*.stream"
+			};
+
+			if (diag.ShowDialog() != true) {
+				return;
+			}
+
+			ManageStreamCuesWindow manageWindow = new ManageStreamCuesWindow(diag.FileName);
+			manageWindow.Show();
+
+			//DoGenericProcessing(true, LoadAudioStream, OnAudioStreamLoaded, diag.FileName);
 		}
 
 		private void OnDataGridSelectionChanged(object sender, SelectionChangedEventArgs e) {

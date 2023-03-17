@@ -49,6 +49,7 @@
                 </MenuItem>
                 <MenuItem Header="_Tools">
                     <MenuItem Header="_Convert loose files..." Click="OnConvertLooseFilesClick"/>
+					<MenuItem Header="_Manage stream cues..." Click="OnManageStreamCuesClick"/>
                 </MenuItem>
                 <MenuItem Header="_Help">
                     <MenuItem Header="_Suppress playback errors" IsCheckable="True" IsChecked="{Binding SuppressErrorsEnabled, Mode=TwoWay}"/>
