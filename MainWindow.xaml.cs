@@ -237,6 +237,19 @@ namespace PD2SoundBankEditor {
 			}
 		}
 
+		private void OnSetNotesFromCuesClick(object sender, RoutedEventArgs e) {
+			try {
+				foreach (StreamInfo info in soundBank.StreamInfos) {
+					AudioStream audioStream = new AudioStream(info);
+					CueUtilities.Cue cue = CueUtilities.CueListFromAudioStream(audioStream).FirstOrDefault();
+
+					if (cue != null) {
+						info.Note = cue.Label;
+					}
+				}
+			} catch (Exception ex) {}
+		}
+
 		private void OnFilterTextBoxChanged(object sender, RoutedEventArgs e) {
 			var text = (sender as TextBox).Text;
 			var view = soundBankViewSource.View;
@@ -299,6 +312,18 @@ namespace PD2SoundBankEditor {
 			}
 		}
 
+		private void OnHamburgerButtonClick(object sender, RoutedEventArgs e) {
+			Button button = (Button) sender;
+			StreamInfo info = (StreamInfo) button.DataContext;
+
+			try {
+				ManageStreamCuesWindow manageWindow = new ManageStreamCuesWindow(info);
+				manageWindow.Show();
+			}  catch (Exception ex) {
+				MessageBox.Show($"An error occured while trying to open the stream {info.Id}:\n{ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+			}
+		}
+
 		private void OnRecentFileClick(object sender, RoutedEventArgs e) {
 			var menuItem = (MenuItem)sender;
 			var file = (string)menuItem.DataContext;
@@ -338,8 +363,6 @@ namespace PD2SoundBankEditor {
 
 			ManageStreamCuesWindow manageWindow = new ManageStreamCuesWindow(diag.FileName);
 			manageWindow.Show();
-
-			//DoGenericProcessing(true, LoadAudioStream, OnAudioStreamLoaded, diag.FileName);
 		}
 
 		private void OnDataGridSelectionChanged(object sender, SelectionChangedEventArgs e) {
@@ -430,6 +453,7 @@ namespace PD2SoundBankEditor {
 			OnFilterTextBoxChanged(filterTextBox, null);
 			extractAllButton.IsEnabled = converterAvailable && containsEmedded;
 			replaceByNamesButton.IsEnabled = converterAvailable && containsEmedded;
+			setNotesFromCuesButton.IsEnabled = containsEmedded;
 			filterTextBox.IsEnabled = containsEmedded;
 			if (!containsEmedded) {
 				MessageBox.Show($"This soundbank does not contain any embedded streams.", "Information", MessageBoxButton.OK, MessageBoxImage.Warning);

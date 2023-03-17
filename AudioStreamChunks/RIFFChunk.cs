@@ -19,7 +19,7 @@ namespace PD2SoundBankEditor.AudioStreamChunks {
 
 			FileType = new string(binaryReader.ReadChars(4));
 
-			while (binaryReader.BaseStream.Position < end) {
+			while (binaryReader.BaseStream.Position < end - 8) {
 				AbstractChunk chunk = ChunkLookup.ReadChunk(binaryReader, Tag, FileType);
 				if (chunk.GetType() == typeof(JUNKChunk)) continue;
 
@@ -31,6 +31,8 @@ namespace PD2SoundBankEditor.AudioStreamChunks {
 					extraChunks.Add(chunk);
 				}
 			}
+
+			binaryReader.BaseStream.Position = end;
 		}
 
 		public override void Write(BinaryWriter binaryWriter) {

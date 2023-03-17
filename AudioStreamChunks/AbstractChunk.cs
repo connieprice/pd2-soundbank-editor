@@ -25,6 +25,8 @@ namespace PD2SoundBankEditor.AudioStreamChunks {
 			uint size = binaryReader.ReadUInt32();
 			if (validateSize && size != DataSize) throw new Exception($"Size of '{tag}' section incorrect!");
 
+			size = (uint) Math.Min(size, binaryReader.BaseStream.Length - binaryReader.BaseStream.Position);
+
 			return size;
 		}
 	}

@@ -7,8 +7,18 @@ namespace PD2SoundBankEditor {
 		public RIFFChunk riffChunk;
 
 		public AudioStream(string file) {
-			using (BinaryReader binaryReader = new BinaryReader(new FileStream(file, FileMode.Open))) {
-				Read(binaryReader);
+			using (FileStream fileStream = new FileStream(file, FileMode.Open)) {
+				using (BinaryReader binaryReader = new BinaryReader(fileStream)) {
+					Read(binaryReader);
+				}
+			}
+		}
+
+		public AudioStream(StreamInfo streamInfo) {
+			using (MemoryStream memoryStream = new MemoryStream(streamInfo.Data)) {
+				using (BinaryReader binaryReader = new BinaryReader(memoryStream)) {
+					Read(binaryReader);
+				}
 			}
 		}
 
@@ -19,7 +29,7 @@ namespace PD2SoundBankEditor {
 		public void Read(BinaryReader binaryReader) {
 			AbstractChunk chunk = ChunkLookup.ReadChunk(binaryReader);
 
-			if (chunk.GetType() != typeof(RIFFChunk)) throw new Exception();
+			if (chunk.GetType() != typeof(RIFFChunk)) throw new Exception("File is not a RIFF chunk");
 
 			riffChunk = (RIFFChunk) chunk;
 		}
@@ -29,6 +39,16 @@ namespace PD2SoundBankEditor {
 				using (BinaryWriter binaryWriter = new BinaryWriter(fileStream)) {
 					Write(binaryWriter);
 				}
+			}
+		}
+
+		public void Write(StreamInfo streamInfo) {
+			using (MemoryStream memoryStream = new MemoryStream()) {
+				using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream)) {
+					Write(binaryWriter);
+				}
+
+				streamInfo.Data = memoryStream.ToArray();
 			}
 		}
 

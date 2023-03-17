@@ -18,10 +18,12 @@ namespace PD2SoundBankEditor.AudioStreamChunks {
 
 			ListType = new string(binaryReader.ReadChars(4));
 
-			while (binaryReader.BaseStream.Position < end) {
+			while (binaryReader.BaseStream.Position < end - 8) {
 				AbstractChunk chunk = ChunkLookup.ReadChunk(binaryReader, Tag, ListType);
 				SubChunks.Add(chunk);
 			}
+
+			binaryReader.BaseStream.Position = end;
 		}
 
 		public override void Write(BinaryWriter binaryWriter) {
