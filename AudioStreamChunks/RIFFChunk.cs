@@ -31,8 +31,6 @@ namespace PD2SoundBankEditor.AudioStreamChunks {
 					extraChunks.Add(chunk);
 				}
 			}
-
-			binaryReader.BaseStream.Position = end;
 		}
 
 		public override void Write(BinaryWriter binaryWriter) {

@@ -22,8 +22,6 @@ namespace PD2SoundBankEditor.AudioStreamChunks {
 				AbstractChunk chunk = ChunkLookup.ReadChunk(binaryReader, Tag, ListType);
 				SubChunks.Add(chunk);
 			}
-
-			binaryReader.BaseStream.Position = end;
 		}
 
 		public override void Write(BinaryWriter binaryWriter) {
@@ -35,7 +33,7 @@ namespace PD2SoundBankEditor.AudioStreamChunks {
 		public static class ADTLSubChunks {
 			[ChunkTag("labl"), ParentChunkTag("LIST"), ParentChunkTagType("adtl")]
 			public class LABLSubChunk : AbstractChunk {
-				public override uint DataSize => (uint) Text.Length + 5;
+				public override uint DataSize => DataUtilities.SizePaddingCalculator((uint) Text.Length + 5, 2);
 				public uint CuePointID;
 				public string Text;
 
@@ -51,6 +49,8 @@ namespace PD2SoundBankEditor.AudioStreamChunks {
 
 					binaryWriter.Write(CuePointID);
 					binaryWriter.WriteCString(Text);
+
+					binaryWriter.WritePadding(DataUtilities.PaddingCalculator((uint) Text.Length + 5, 2));
 				}
 			}
 		}

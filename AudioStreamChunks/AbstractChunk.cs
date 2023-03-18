@@ -139,8 +139,10 @@ namespace PD2SoundBankEditor.AudioStreamChunks {
 			} else {
 				chunk = (AbstractChunk) Activator.CreateInstance(ByTag(tag, parentTag, parentTagType));
 			}
+
 			binaryReader.BaseStream.Position = tempPosition;
 			chunk.Read(binaryReader);
+			binaryReader.BaseStream.Position = tempPosition + chunk.TotalSize;
 
 			return chunk;
 		}

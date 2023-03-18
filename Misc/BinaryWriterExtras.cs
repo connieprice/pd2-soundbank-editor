@@ -10,7 +10,13 @@ namespace PD2SoundBankEditor.Misc {
 	static class BinaryWriterExtras {
         static public void WriteCString(this BinaryWriter self, string str) {
             self.Write(str.ToCharArray());
-            self.Write((byte) 0);
+            self.WritePadding(1);
+        }
+
+        static public void WritePadding(this BinaryWriter self, uint paddingNeeded) {
+            for (int padCount = 0; padCount < paddingNeeded; padCount++) {
+                self.Write((byte) 0);
+            }
         }
     }
 }

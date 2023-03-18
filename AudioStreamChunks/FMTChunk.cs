@@ -2,6 +2,7 @@
 
 namespace PD2SoundBankEditor.AudioStreamChunks {
 	public enum FormatType : ushort {
+		PCM = 0x0001,
 		IMA = 0x0002,
 		VORBIS = 0xFFFF
 	}
@@ -60,6 +61,8 @@ namespace PD2SoundBankEditor.AudioStreamChunks {
 	public class FMTChunk : AbstractChunk {
 		public override uint DataSize { get {
 			switch (this.FormatTag) {
+				case FormatType.PCM:
+					return 16;
 				case FormatType.IMA:
 					return 24;
 				case FormatType.VORBIS:
@@ -93,6 +96,8 @@ namespace PD2SoundBankEditor.AudioStreamChunks {
 			BlockAlign = binaryReader.ReadUInt16();
 			BitsPerSample = binaryReader.ReadUInt16();
 
+			if (DataSize <= 16) return;
+
 			ExtraSize = binaryReader.ReadUInt16();
 			Unknown = binaryReader.ReadUInt16();
 
@@ -112,6 +117,8 @@ namespace PD2SoundBankEditor.AudioStreamChunks {
 			binaryWriter.Write(AverageBytesPerSecond);
 			binaryWriter.Write(BlockAlign);
 			binaryWriter.Write(BitsPerSample);
+
+			if (DataSize <= 16) return;
 
 			binaryWriter.Write(ExtraSize);
 			binaryWriter.Write(Unknown);
